@@ -29,10 +29,8 @@
 1. 현재까지 엑셀에 기록해둔 매물 정보들을 DB에 삽입합니다.
     - `real_estate` 라는 이름의 데이터베이스를 만듭니다.
     - `/api/test-data` 경로로 `POST` 요청을 보내면 아래의 파일을 파싱 후 Spring Data JPA를  사용해 `property` 테이블에 저장하는 컨트롤러를 작성합니다.
+        [매물_정보 (1).xlsx](https://github.com/IT-Cotato/9th-BE-Networking-1/files/14632382/_.1.xlsx)
 
-[매물_정보 (1).xlsx](https://github.com/IT-Cotato/9th-BE-Networking-1/files/14632382/_.1.xlsx)
-
-        
     - 엑셀 파일엔 아래와 같은 정보가 들어있습니다.
         1. 우편번호
             
