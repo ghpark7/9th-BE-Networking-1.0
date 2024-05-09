@@ -25,10 +25,12 @@ class Property extends Sequelize.Model {
                 timestamps: true,
                 underscored: false,
                 modelName: 'Property',
-                tableName: 'properties',
+                tableName: 'property',
                 paranoid: true,
                 charset: 'utf8',
                 collate: 'utf8_general_ci',
         });
     }
-}
+};
+
+module.exports = Property;

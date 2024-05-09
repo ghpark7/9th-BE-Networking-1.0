@@ -1,4 +1,4 @@
-const sequelize = require('sequelize');
+const Sequelize = require('sequelize');
 const config = require('../config/config.json')['development'];
 const Property = require('./property');
 const XLSX = require('xlsx');
@@ -11,7 +11,7 @@ const sequelize = new Sequelize(config.database, config.username, config.passwor
 Property.initiate(sequelize);
 
 // 엑셀 파일 읽기
-const workbook = XLSX.readFile('매물_정보.xlsx');
+const workbook = XLSX.readFile('./매물_정보.xlsx');
 const sheet_name_list = workbook.SheetNames;
 const data = XLSX.utils.sheet_to_json(workbook.Sheets[sheet_name_list[0]]);
 
