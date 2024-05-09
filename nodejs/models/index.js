@@ -1,4 +1,4 @@
-const Sequelize = require('sequelize');
+const sequelize = require('sequelize');
 const config = require('../config/config.json')['development'];
 const Property = require('./property');
 const XLSX = require('xlsx');
