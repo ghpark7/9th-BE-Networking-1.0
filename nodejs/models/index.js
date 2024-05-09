@@ -1,43 +1,33 @@
-'use strict';
-
-const fs = require('fs');
-const path = require('path');
 const Sequelize = require('sequelize');
-const process = require('process');
-const basename = path.basename(__filename);
-const env = process.env.NODE_ENV || 'development';
-const config = require(__dirname + '/../config/config.json')[env];
-const db = {};
+const config = require('../config/config.json')['development'];
+const Property = require('./property');
+const XLSX = require('xlsx');
 
-let sequelize;
-if (config.use_env_variable) {
-  sequelize = new Sequelize(process.env[config.use_env_variable], config);
-} else {
-  sequelize = new Sequelize(config.database, config.username, config.password, config);
-}
-
-fs
-  .readdirSync(__dirname)
-  .filter(file => {
-    return (
-      file.indexOf('.') !== 0 &&
-      file !== basename &&
-      file.slice(-3) === '.js' &&
-      file.indexOf('.test.js') === -1
-    );
-  })
-  .forEach(file => {
-    const model = require(path.join(__dirname, file))(sequelize, Sequelize.DataTypes);
-    db[model.name] = model;
-  });
-
-Object.keys(db).forEach(modelName => {
-  if (db[modelName].associate) {
-    db[modelName].associate(db);
-  }
+const sequelize = new Sequelize(config.database, config.username, config.password, {
+    host: config.host,
+    dialect: config.dialect
 });
 
-db.sequelize = sequelize;
-db.Sequelize = Sequelize;
+Property.initiate(sequelize);
+
+// 엑셀 파일 읽기
+const workbook = XLSX.readFile('매물_정보.xlsx');
+const sheet_name_list = workbook.SheetNames;
+const data = XLSX.utils.sheet_to_json(workbook.Sheets[sheet_name_list[0]]);
+
+// 데이터베이스에 데이터 저장
+data.forEach(async (row) => {
+  await Property.create({
+      postalCode: row['우편번호'],
+      roadAddress: `${row['시도']} ${row['시군구']} ${row['도로명']} ${row['건물번호 본번']}-${row['건물번호 부번']}`,
+      jibunAddress: `${row['시도']} ${row['시군구']} ${row['법정동명']} ${row['지번본번']}-${row['지번부번']}`
+  });
+});
+
+const db = {
+    sequelize,
+    Sequelize,
+    Property
+};
 
 module.exports = db;
